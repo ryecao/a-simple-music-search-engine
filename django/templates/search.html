@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+  <title>Muse Music Search</title>
+  <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}">
+  <script src="{% static "js/jquery-1.10.2.js" %}"></script>
+  <script src="{% static "js/jquery-ui.js" %}"></script>
+  
+  <script>
+$(function() {
+    var availableTags = [
+          {%for i in autocomplete_list%}
+          "{{i}}",
+          {%endfor%}
+    ];
+    $( "#search" ).autocomplete({
+      source: availableTags,
+      minLength: 3,
+      select: function(event,ui){
+        if(ui.item){
+           $(event.target).val(ui.item.value);
+        }
+        $(event.target.form).submit();
+      }
+    });
+  });
+  </script>
+</head>
+<body>
+  <h2 class="logo">Muse 音乐搜索</h2>
+  <form id="fsearch" action="." method="GET">
+    <input type="text" id="search" name="q" value="{{ query|escape }}" required>
+    <label for="submit">Search</label>
+    <input type="submit" id="submit" value="Search" hidden="true">
+  </form>
+  <div class="result-head2">
+    <a href="/search/?q={{sug_str}}">
+      {%if sug_flag %}
+        <h3 class="suggest"  style="display: inline;color:#fff;">Do you mean: </h3>
+        {% for i in sug_query_list %}
+          {% if i.0 %}
+            <h3 class="suggest" style=";color:#e22;display: inline;">{{i.1}} </h3>
+          {% else %}
+            <h3 class="suggest" style="color:#fff;display: inline;">{{i.1}} </h3>
+          {% endif %}
+        {% endfor %}
+        <h3 class="suggest" style="display: inline;color:#fff;">?</h3>
+      {% endif %} 
+    </a>  
+  </div>
+  {% if query %}
+    <h2 class="result-head2">Results for "{{ query|escape }}":</h2>
+    {% if chn%}
+    {% if res %}
+      <ul>
+        {% for item in res%} 
+          <div class="result-view-cell" style="background-color:{{item.4}}!important;transition: 0.1s; -webkit-transition: 0.1s; ">
+            <a href="http://www.xiami.com/song/{{item.3}}">
+              <li>
+                <div class="album-art">
+                  <img height="100" width="100" src="{% static "images/"%}img_{{item.0}}.jpg">
+                  </img>
+                <div class="open-button"><p>Open<p></div>
+              </div>
+            </a>
+            <table class="info" >
+              <tr><td style="color:{{item.5}}" class="info-title">{{item.0}}</td></tr>
+              <tr><td style="color:{{item.6}}" class="info-singer">{{item.1}}</td></tr>
+              <tr><td style="color:{{item.6}}" class="info-singer">{{item.2}}</tr>
+            </table>
+            <div class="tag-container">
+              
+              <tr>
+              {% if item.8 %}
+                <a class="tag" style="background-color:{{item.4}}" href="/search/?q={{item.8}}">&nbsp;{{item.8}}&nbsp;</a>
+              {% endif %}
+              {% if item.9 %}
+                <a class="tag" style="background-color:{{item.4}}" href="/search/?q={{item.9}}">&nbsp;{{item.9}}&nbsp;</a> 
+              {% endif %}
+              {% if item.10 %}
+                <a class="tag" style="background-color:{{item.4}}" href="/search/?q={{item.10}}">&nbsp;{{item.10}}&nbsp;</a>
+              {% endif %}
+              </tr>
+            </div>
+          </div>
+
+        </li>
+      {% endfor %}
+      {% for title,color in color.items %}
+        <li>{{color}}</li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+    <ul>
+      <li class="result-view-cell">No music found</li>
+    </ul>
+    {% endif %}
+    {% else %}
+    <ul>
+      <li class="result-view-cell">根据相关政策和法律法规，搜索结果未予显示</li>
+    </ul>
+    {% endif %}
+    <div class="pagination">
+      <span class="step-links">
+          {% if res.has_previous %}
+              <a class="previous"href="?q={{query|escape}}&amp;page={{ res.previous_page_number }}">&nbsp;previous&nbsp;</a>
+          {% endif %}
+
+          <span class="current">
+              {{ res.number }} / {{ res.paginator.num_pages }}
+          </span>
+
+          {% if res.has_next %}
+              <a class="next" href="?q={{query|escape}}&amp;page={{ res.next_page_number }}">&nbsp;&nbsp;&nbsp;&nbsp;next&nbsp;&nbsp;&nbsp;&nbsp;</a>
+          {% endif %}
+      </span>
+    </div>
+  {%endif%}
+</body>
+</html>
