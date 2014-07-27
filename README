@@ -1,0 +1,29 @@
+The way to run server:
+	1.install django and python
+	2.cd in site folder, run command "python manage.py runserver"
+
+Samples:
+	Contains some screenshots and raw html of our site.
+
+Site:
+	\muse\media
+		contains css, js files and images.
+	\muse\muse
+		project folder. Url and other settings of django framework
+	\muse\search
+		the folder of search app of django framework. Modify views.py
+	\muse\search\templates
+		django templates folder
+	\muse\search\engine\
+		stores the code to process document, query and realize other function.
+		the code in this folder stores the SOURCE CODE.
+	\muse\search\engine\data
+		stores music json files and python pickle files to store some data structure we use
+
+spider:
+	python source code used for spider of python scrapy framework
+src:
+	our SOURCE CODE
+
+README:
+	this file.
