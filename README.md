@@ -1,4 +1,4 @@
-#A simple music search engine built with django.
+#A simple music search engine built with python
 
 ##doc_process.py
 Build inverted index and other data needed, including dictionary for speel check, store the dominant color of the cover of alubms, etc.
@@ -17,3 +17,6 @@ Calculating td-idf, then using vector space model to calc cosine similarities, a
 
 ##spell_check.py
 For auto-correction function.
+
+##Screenshot
+![screenshot-of-the-site](https://github.com/ryecao/a-simple-music-search-engine/blob/master/media/images/screenshot.png)
